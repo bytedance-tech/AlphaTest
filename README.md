@@ -22,7 +22,7 @@ source 'https://github.com/bytedance-tech/AlphaTestRepo.git'
 platform :ios, '9.0'
 
 target 'TargetName' do
-pod 'Bytedance-UnionAD'
+pod 'Pangle-UnionAD-Test'
 end
 ```
 Then, run the following command:
