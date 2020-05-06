@@ -1,14 +1,11 @@
-# Bytedance-UnionAD
+# Bytedance-UnionAD Only for test
 
 Pod for Bytedance-UnionAD only support **x86_64, armv7, armv7s, arm64**.
 
 ## How To Get Started
 
-+ [Download Bytedance-UnionAD](https://github.com/bytedance/Bytedance-UnionAD/tree/master) and try out the included [example app](https://github.com/bytedance/Bytedance-UnionAD/tree/master/Example)
++ [Download Bytedance-UnionAD](https://github.com/bytedance-tech/AlphaTest.git) and try out the included [example app](https://github.com/bytedance-tech/AlphaTest/tree/master/Example/BUDemo)
 
-+ Check out the [documentation](https://github.com/bytedance/Bytedance-UnionAD/blob/master/Bytedance-UnionAd/Document/UnioniOSSDK.md) for a comprehensive look at all of the APIs available in Bytedance-UnionAD
-
-+ If you have other questions, please read [FAQ](https://github.com/bytedance/Bytedance-UnionAD/blob/master/Bytedance-UnionAd/Document/UnioniOSSDK.md#faq) first
 
 ## Installation with CocoaPods
 
@@ -21,11 +18,11 @@ $ gem install cocoapods
 
 To integrate Bytedance-UnionAD into your Xcode project using CocoaPods, **you must install Git LFS first**,then specify it in your **Podfile**:
 ```ruby
-source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/bytedance-tech/AlphaTestRepo.git'
 platform :ios, '9.0'
 
 target 'TargetName' do
-pod 'Bytedance-UnionAD'
+pod 'Pangle-UnionAD-Test'
 end
 ```
 Then, run the following command:
