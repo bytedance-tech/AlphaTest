@@ -1,26 +1,23 @@
 //
-//  BUDMopubNativeInterstitialVC.m
+//  PangleNativeInterstitialView.m
 //  BUDemo
 //
 //  Created by bytedance on 2020/4/24.
 //  Copyright © 2020 bytedance. All rights reserved.
 //
 
-#import "BUDMopubNativeInterstitialVC.h"
-#import "UIImageView+AFNetworking.h"
+#import "PangleNativeInterstitialView.h"
+#import <BUFoundation/UIImageView+BUWebCache.h>
 #import <BUAdSDK/BUNativeAdRelatedView.h>
-#import "BUDMacros.h"
-#import "BUDNormalButton.h"
-#import "UIView+Draw.h"
-#import "NSString+LocalizedString.h"
+#import <BUFoundation/UIView+BUAdditions.h>
 
 static CGSize const dislikeSize = {15, 15};
 static CGSize const logoSize = {20, 20};
 #define leftEdge 20
 #define titleHeight 40
 
-@interface BUDMopubNativeInterstitialVC () <BUNativeAdDelegate>
-@property (nonatomic, weak) id <BUDMopubNativeInterstitialVCDelegate> delegate;
+@interface PangleNativeInterstitialView () <BUNativeAdDelegate>
+@property (nonatomic, weak) id <PangleNativeInterstitialViewDelegate> delegate;
 @property (nonatomic, strong) BUNativeAd *nativeAd;
 @property (nonatomic, strong) BUNativeAdRelatedView *relatedView;
 @property (nonatomic, strong) UIView *backgroundView;
@@ -33,14 +30,14 @@ static CGSize const logoSize = {20, 20};
 @property (nonatomic, strong) UIButton *dowloadButton;
 @end
 
-@implementation BUDMopubNativeInterstitialVC
+@implementation PangleNativeInterstitialView
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self buildupView];
 }
 
-- (BOOL)showAdFromRootViewController:(UIViewController *)rootViewController delegate:(id <BUDMopubNativeInterstitialVCDelegate>)delegate{
+- (BOOL)showAdFromRootViewController:(UIViewController *)rootViewController delegate:(id <PangleNativeInterstitialViewDelegate>)delegate{
     if (!rootViewController.presentedViewController) {
         self.delegate = delegate;
         [rootViewController presentViewController:self animated:YES completion:^{
@@ -76,7 +73,7 @@ static CGSize const logoSize = {20, 20};
     [self.whiteBackgroundView addSubview:self.describeLable];
     
     self.dowloadButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.dowloadButton.backgroundColor = mainColor;
+    self.dowloadButton.backgroundColor = [UIColor colorWithRed:(0xff/255.0) green:(0x63/255.0) blue:(0x5c/255.0) alpha:1];
     self.dowloadButton.layer.cornerRadius = 5;
     self.dowloadButton.clipsToBounds = YES;
     [self.whiteBackgroundView addSubview:self.dowloadButton];
@@ -110,18 +107,18 @@ static CGSize const logoSize = {20, 20};
 
 - (void)layoutViewsWithimageViewHeight:(CGFloat)imageViewHeight {
     CGFloat whiteViewHeight = titleHeight + imageViewHeight + 10 + titleHeight + 10 + 30;
-    self.whiteBackgroundView.frame = CGRectMake(leftEdge, (self.view.height - whiteViewHeight)/2, self.view.width-2*leftEdge, whiteViewHeight);
+    self.whiteBackgroundView.frame = CGRectMake(leftEdge, (self.view.bu_height - whiteViewHeight)/2, self.view.bu_width-2*leftEdge, whiteViewHeight);
     
-    self.titleLable.frame = CGRectMake(13, 0, self.whiteBackgroundView.width - 2*13 , titleHeight);
-    self.describeLable.frame = CGRectMake(0, 0, self.whiteBackgroundView.width - 2*13 , titleHeight);
+    self.titleLable.frame = CGRectMake(13, 0, self.whiteBackgroundView.bu_width - 2*13 , titleHeight);
+    self.describeLable.frame = CGRectMake(0, 0, self.whiteBackgroundView.bu_width - 2*13 , titleHeight);
     self.dowloadButton.frame = CGRectMake(0, 0, 200, 30);
     
     CGFloat margin = 5;
     CGFloat logoIconX = CGRectGetWidth(self.whiteBackgroundView.bounds) - logoSize.width - margin;
-    CGFloat logoIconY = self.whiteBackgroundView.height - logoSize.height - margin;
+    CGFloat logoIconY = self.whiteBackgroundView.bu_height - logoSize.height - margin;
     self.logoImgeView.frame = CGRectMake(logoIconX, logoIconY, logoSize.width, logoSize.height);
     
-    self.dislikeButton.frame = CGRectMake(self.whiteBackgroundView.right-dislikeSize.width , self.whiteBackgroundView.top-dislikeSize.height-10, dislikeSize.width, dislikeSize.height);
+    self.dislikeButton.frame = CGRectMake(self.whiteBackgroundView.bu_right-dislikeSize.width , self.whiteBackgroundView.top-dislikeSize.height-10, dislikeSize.width, dislikeSize.height);
 }
 
 - (void)refreshUIWithAd:(BUNativeAd *_Nonnull)nativeAd{
@@ -136,13 +133,13 @@ static CGSize const logoSize = {20, 20};
         [self layoutViewsWithimageViewHeight:imageViewHeight];
         
         if (adImage.imageURL.length) {
-            [self.interstitialAdView setImageWithURL:[NSURL URLWithString:adImage.imageURL] placeholderImage:nil];
+            [self.interstitialAdView sdBu_setImageWithURL:[NSURL URLWithString:adImage.imageURL] placeholderImage:nil];
         }
         
-        self.describeLable.frame = CGRectMake(13, self.interstitialAdView.bottom + 5, self.describeLable.width, self.describeLable.height);
+        self.describeLable.frame = CGRectMake(13, self.interstitialAdView.bu_bottom + 5, self.describeLable.bu_width, self.describeLable.bu_height);
         self.describeLable.text = nativeAd.data.AdDescription;
         
-        self.dowloadButton.frame = CGRectMake((self.whiteBackgroundView.width - self.dowloadButton.width)/2, self.describeLable.bottom + 5, self.dowloadButton.width, self.dowloadButton.height);
+        self.dowloadButton.frame = CGRectMake((self.whiteBackgroundView.bu_width - self.dowloadButton.bu_width)/2, self.describeLable.bu_bottom + 5, self.dowloadButton.bu_width, self.dowloadButton.bu_height);
         [self.dowloadButton setTitle:nativeAd.data.buttonText forState:UIControlStateNormal];
         
         [self.nativeAd registerContainer:self.whiteBackgroundView    withClickableViews:@[self.titleLable,self.interstitialAdView,self.describeLable,self.dowloadButton]];

@@ -11,19 +11,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSInteger, BURenderMethod) {
-    BURenderMethodOrigin    = 1,    // native express
-    BURenderMethodDynamic   = 2,    // general
-};
-
 @interface BUAdSDKAdapterConfiguration :MPBaseAdapterConfiguration
 
 @property (nonatomic, copy, readonly) NSString * adapterVersion;
 @property (nonatomic, copy, readonly) NSString * biddingToken;
 @property (nonatomic, copy, readonly) NSString * moPubNetworkName;
 @property (nonatomic, copy, readonly) NSString * networkSdkVersion;
-/// @required   render Method
-@property (nonatomic, assign) BURenderMethod renderMethod;
 
 + (void)updateInitializationParameters:(NSDictionary *)parameters;
 

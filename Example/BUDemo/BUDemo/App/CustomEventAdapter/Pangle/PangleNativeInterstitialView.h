@@ -1,5 +1,5 @@
 //
-//  BUDMopubNativeInterstitialVC.h
+//  PangleNativeInterstitialView.h
 //  BUDemo
 //
 //  Created by bytedance on 2020/4/24.
@@ -11,17 +11,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol BUDMopubNativeInterstitialVCDelegate <NSObject>
+@protocol PangleNativeInterstitialViewDelegate <NSObject>
 
 - (void)nativeInterstitialAdWillClose:(BUNativeAd *)nativeAd;
 - (void)nativeInterstitialAdDidClose:(BUNativeAd *)nativeAd;
 
 @end
 
-@interface BUDMopubNativeInterstitialVC : UIViewController
+@interface PangleNativeInterstitialView : UIViewController
 
 - (void)refreshUIWithAd:(BUNativeAd *_Nonnull)nativeAd;
-- (BOOL)showAdFromRootViewController:(UIViewController *)rootViewController delegate:(id <BUDMopubNativeInterstitialVCDelegate>)delegate;
+- (BOOL)showAdFromRootViewController:(UIViewController *)rootViewController delegate:(id <PangleNativeInterstitialViewDelegate>)delegate;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -1,5 +1,5 @@
 //
-//  BUDMopubNativeBannerView.h
+//  PangleNativeBannerView.h
 //  BUADDemo
 //
 //  Created by bytedance on 2020/4/24.
@@ -12,7 +12,7 @@
 NS_ASSUME_NONNULL_BEGIN
 static CGFloat const bottomHeight = 30;
 
-@interface BUDMopubNativeBannerView : UIView
+@interface PangleNativeBannerView : UIView
 @property (nonatomic, strong) BUNativeAd *nativeAd;
 - (instancetype)initWithSize:(CGSize)size;
 - (void)refreshUIWithAd:(BUNativeAd *_Nonnull)nativeAd;

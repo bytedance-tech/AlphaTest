@@ -8,12 +8,12 @@
 
 #import "PangleBannerCustomEvent.h"
 #import <BUAdSDK/BUAdSDK.h>
-#import "BUDMopubNativeBannerView.h"
+#import "PangleNativeBannerView.h"
 
 @interface PangleBannerCustomEvent ()<BUNativeExpressBannerViewDelegate,BUNativeAdDelegate>
 @property (nonatomic, strong) BUNativeExpressBannerView *expressBannerView;
 @property (nonatomic, strong) BUNativeAd *nativeAd;
-@property (nonatomic, strong) BUDMopubNativeBannerView *nativeBannerView;
+@property (nonatomic, strong) PangleNativeBannerView *nativeBannerView;
 @end
 
 @implementation PangleBannerCustomEvent
@@ -21,15 +21,16 @@
     BOOL hasAdMarkup = adMarkup.length > 0;
     NSDictionary *ritDict;
     NSString *ritStr;
-    if (adMarkup != nil) {
-        ritDict = [BUAdSDKManager AdTypeWithAdMarkUp:adMarkup];
-        ritStr = [ritDict objectForKey:@"adSlotID"];
-    }else{
-        ritStr = [info objectForKey:@"rit"];
-        ritDict = [BUAdSDKManager AdTypeWithRit:ritStr];
+    ritStr = [info objectForKey:@"ad_placement_id"];
+    if (ritStr == nil) {
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:0 userInfo:@{NSLocalizedDescriptionKey: @"Invalid Pangle placement ID"}];
+        [self.delegate bannerCustomEvent:self didFailToLoadAdWithError:error];
+        return;
     }
-    //showType: @"1" express AD   @"2" native AD
-    NSInteger showType = [[ritDict objectForKey:@"showType"] integerValue];
+    ritDict = [BUAdSDKManager AdTypeWithRit:ritStr];
+    
+    //renderType: @"1" express AD   @"2" native AD
+    NSInteger showType = [[ritDict objectForKey:@"renderType"] integerValue];
 
     BUSize *adSize = [[BUSize alloc] init];
     adSize.width = size.width;
@@ -62,7 +63,7 @@
             nad.delegate = self;
             self.nativeAd = nad;
         }
-        self.nativeBannerView = [[BUDMopubNativeBannerView alloc] initWithSize:size];
+        self.nativeBannerView = [[PangleNativeBannerView alloc] initWithSize:size];
         if (hasAdMarkup) {
             [self.nativeAd setMopubAdMarkUp:adMarkup];
         }else{

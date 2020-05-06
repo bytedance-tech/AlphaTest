@@ -17,7 +17,7 @@
 }
 
 - (NSString *)biddingToken {
-    return [BUAdSDKManager mopubBiddingToken];
+    return nil;
 }
 
 - (NSString *)moPubNetworkName {
@@ -30,9 +30,6 @@
 
 - (void)initializeNetworkWithConfiguration:(NSDictionary<NSString *, id> *)configuration complete:(void(^)(NSError *))complete {
     NSString *appkeyString = configuration[@"appKey"];
-    NSNumber *Coppa = configuration[@"Coppa"];
-    NSNumber *isPaidApp = configuration[@"isPaidApp"];
-    NSNumber *GDPR = configuration[@"GDPR"];
     if (appkeyString == nil || [appkeyString isKindOfClass:[NSString class]] == NO) {
         NSError *theError = [NSError errorWithDomain:@"com.bytedance.AdapterConfiguration" code:1 userInfo:@{NSLocalizedDescriptionKey:@"appKey may be not right, please set networkConfig refer to method '-configCustomEvent' in 'AppDelegate' class"}];
         if (complete != nil) {
@@ -45,15 +42,6 @@
                 [BUAdSDKManager setAppID:[BUDAdManager appKey]];
                 [BUAdSDKManager setIsPaidApp:NO];
                 [BUAdSDKManager setLoglevel:BUAdSDKLogLevelDebug];
-                if ((Coppa && [Coppa isKindOfClass:[NSNumber class]])) {
-                    [BUAdSDKManager setCoppa:Coppa.integerValue];
-                }
-                if ((isPaidApp && [isPaidApp isKindOfClass:[NSNumber class]])) {
-                    [BUAdSDKManager setIsPaidApp:isPaidApp.integerValue == 0 ? NO : YES];
-                }
-                if ((GDPR && [GDPR isKindOfClass:[NSNumber class]])) {
-                    [BUAdSDKManager setGDPR:GDPR.integerValue];
-                }
                 // This is a example to set GDPR. You can change GDPR at right scence
                 if ([[MoPub sharedInstance] isGDPRApplicable] != MPBoolUnknown) {
                     BOOL canCollect =  [[MoPub sharedInstance] canCollectPersonalInfo];

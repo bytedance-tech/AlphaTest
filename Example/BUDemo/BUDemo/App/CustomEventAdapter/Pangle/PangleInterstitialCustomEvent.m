@@ -8,11 +8,11 @@
 
 #import "PangleInterstitialCustomEvent.h"
 #import <BUAdSDK/BUAdSDK.h>
-#import "BUDMopubNativeInterstitialVC.h"
+#import "PangleNativeInterstitialView.h"
 
-@interface PangleInterstitialCustomEvent () <BUNativeAdDelegate,BUNativeExpresInterstitialAdDelegate,BUFullscreenVideoAdDelegate,BUDMopubNativeInterstitialVCDelegate>
+@interface PangleInterstitialCustomEvent () <BUNativeAdDelegate,BUNativeExpresInterstitialAdDelegate,BUFullscreenVideoAdDelegate,PangleNativeInterstitialViewDelegate>
 @property (nonatomic, strong) BUNativeAd *nativeInterstitialAd;
-@property (nonatomic, strong) BUDMopubNativeInterstitialVC *nativeInterstitialVC;
+@property (nonatomic, strong) PangleNativeInterstitialView *nativeInterstitialVC;
 @property (nonatomic, strong) BUNativeExpressInterstitialAd *expressInterstitialAd;
 @property (strong, nonatomic) BUFullscreenVideoAd *fullScreenVideo;
 @end
@@ -22,16 +22,17 @@
     BOOL hasAdMarkup = adMarkup.length > 0;
     NSDictionary *ritDict;
     NSString *ritStr;
-    if (adMarkup != nil) {
-        ritDict = [BUAdSDKManager AdTypeWithAdMarkUp:adMarkup];
-        ritStr = [ritDict objectForKey:@"adSlotID"];
-    }else{
-        ritStr = [info objectForKey:@"rit"];
-        ritDict = [BUAdSDKManager AdTypeWithRit:ritStr];
+    ritStr = [info objectForKey:@"ad_placement_id"];
+    if (ritStr == nil) {
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:0 userInfo:@{NSLocalizedDescriptionKey: @"Invalid Pangle placement ID"}];
+        [self.delegate interstitialCustomEvent:self didFailToLoadAdWithError:error];
+        return;
     }
+    ritDict = [BUAdSDKManager AdTypeWithRit:ritStr];
+    
     BUAdSlotAdType adType = [[ritDict objectForKey:@"adSlotType"] integerValue];
-    //showType: @"1" express AD   @"2" native AD
-    NSInteger showType = [[ritDict objectForKey:@"showType"] integerValue];
+    //renderType: @"1" express AD   @"2" native AD
+    NSInteger showType = [[ritDict objectForKey:@"renderType"] integerValue];
     if (adType == BUAdSlotAdTypeInterstitial) {
         if (showType == 1) {
             self.expressInterstitialAd = [[BUNativeExpressInterstitialAd alloc] initWithSlotID:ritStr adSize:CGSizeMake(300, 400)];
@@ -62,7 +63,7 @@
             }else{
                 [nad loadAdData];
             }
-            self.nativeInterstitialVC = [[BUDMopubNativeInterstitialVC alloc] init];
+            self.nativeInterstitialVC = [[PangleNativeInterstitialView alloc] init];
         }
     }else if (adType == BUAdSlotAdTypeFullscreenVideo){
         self.fullScreenVideo = [[BUFullscreenVideoAd alloc] initWithSlotID:ritStr];
@@ -114,7 +115,7 @@
     [self.delegate interstitialCustomEventDidAppear:self];
 }
 
-#pragma mark BUDMopubNativeInterstitialVCDelegate
+#pragma mark PangleNativeInterstitialViewDelegate
 - (void)nativeInterstitialAdWillClose:(BUNativeAd *)nativeAd{
     [self.delegate interstitialCustomEventWillDisappear:self];
 }

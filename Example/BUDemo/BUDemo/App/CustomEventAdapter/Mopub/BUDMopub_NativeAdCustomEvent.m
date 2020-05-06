@@ -2,16 +2,17 @@
 //  BUDMopub_NativeAdCustomEvent.m
 //  BUDemo
 //
-//  Created by bytedance on 2020/1/8.
+//  Created by liudonghui on 2020/1/8.
 //  Copyright © 2020 bytedance. All rights reserved.
 //
 
 #import "BUDMopub_NativeAdCustomEvent.h"
+#import "BUDSlotID.h"
 #import "BUDMopub_nativeAdAdapter.h"
+
 #import <BUAdSDK/BUNativeAd.h>
 #import <mopub-ios-sdk/MPNativeAdRendererSettings.h>
 #import <mopub-ios-sdk/MPNativeAd.h>
-#import <BUAdSDK/BUAdSDK.h>
 
 @interface BUDMopub_NativeAdCustomEvent () <BUNativeAdDelegate>
 @property (nonatomic, strong) BUNativeAd *nativeAd;
@@ -34,22 +35,11 @@
 }
 
 - (void)requestAdWithCustomEventInfo:(NSDictionary *)info adMarkup:(NSString *)adMarkup {
-    BOOL hasAdMarkup = adMarkup.length > 0;
-    NSDictionary *ritDict;
-    NSString *ritStr;
-    if (adMarkup != nil) {
-        ritDict = [BUAdSDKManager AdTypeWithAdMarkUp:adMarkup];
-        ritStr = [ritDict objectForKey:@"adSlotID"];
-    }else{
-        ritStr = [info objectForKey:@"rit"];
-        ritDict = [BUAdSDKManager AdTypeWithRit:ritStr];
+    NSString *slotId = [info objectForKey:@"slotid"];
+    if ([slotId isKindOfClass:[NSString class]] && slotId.length) {
+        self.nativeAd.adslot.ID = slotId;
     }
-    self.nativeAd.adslot.ID = ritStr;
-    if (hasAdMarkup) {
-        [self.nativeAd setMopubAdMarkUp:adMarkup];
-    }else{
-        [self.nativeAd loadAdData];
-    }
+    [self.nativeAd loadAdData];
 }
 
 - (void)requestAdWithCustomEventInfo:(NSDictionary *)info {
