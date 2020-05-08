@@ -19,14 +19,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** Mopub Adaptor get AD type from rit
   *   @return  @{@"adSlotType": @(1), @"renderType": @(1)}
-  *   adSlotTyore refer from BUAdSlotAdType in "BUAdSlot.h"
+  *   adSlotType refer from BUAdSlotAdType in "BUAdSlot.h"
   *   showType: @"1" express AD   @"2" native AD
   */
 + (NSDictionary *)AdTypeWithRit:(NSString *)rit;
 
 /** Mopub bidding Adaptor get AD type from adm
-  *  @return  @{@"adSlotType": @(1), @"renderType": @(1), @"adSlotID": @"900546859"}
-  *  adSlotTyore refer from BUAdSlotAdType in "BUAdSlot.h"
+  *  @return  @{@"adSlotType": @(1), @"renderType": @(1)}
+  *  adSlotType refer from BUAdSlotAdType in "BUAdSlot.h"
   *  showType: @"1" express AD   @"2" native AD
   */
 + (NSDictionary *)AdTypeWithAdMarkUp:(NSString *)adm;
