@@ -33,8 +33,8 @@
 }
 
 - (void)setUpRewardVideo {    
-    [MPRewardedVideo setDelegate:self forAdUnitId:mopub_reward_UnitID];
-    [MPRewardedVideo loadRewardedVideoAdWithAdUnitID:mopub_reward_UnitID withMediationSettings:@[@"1",@"a"]];
+    [MPRewardedVideo setDelegate:self forAdUnitId:mopub_official_reward_UnitID];
+    [MPRewardedVideo loadRewardedVideoAdWithAdUnitID:mopub_official_reward_UnitID withMediationSettings:@[@"1",@"a"]];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -55,9 +55,9 @@
 
 #pragma mark 事件处理
 - (void)buttonTapped:(id)sender {
-    BOOL isvalid = [MPRewardedVideo hasAdAvailableForAdUnitID:mopub_reward_UnitID];
+    BOOL isvalid = [MPRewardedVideo hasAdAvailableForAdUnitID:mopub_official_reward_UnitID];
     if (isvalid) {
-        [MPRewardedVideo presentRewardedVideoAdForAdUnitID:mopub_reward_UnitID fromViewController:self withReward:nil];
+        [MPRewardedVideo presentRewardedVideoAdForAdUnitID:mopub_official_reward_UnitID fromViewController:self withReward:nil];
     }
     self.button.isValid = NO;
 }

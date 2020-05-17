@@ -7,7 +7,6 @@
 //
 
 #import "BUDMopub_NativeAdCustomEvent.h"
-#import "BUDSlotID.h"
 #import "BUDMopub_nativeAdAdapter.h"
 
 #import <BUAdSDK/BUNativeAd.h>

@@ -38,7 +38,7 @@
 - (void)loadInterstitial {
     // Instantiate the interstitial using the class convenience method.
     self.interstitial = [MPInterstitialAdController
-                         interstitialAdControllerForAdUnitId:mopub_intersttitial_UnitID];
+                         interstitialAdControllerForAdUnitId:mopub_official_intersttitial_UnitID];
     
     self.interstitial.delegate = self;
     [self.interstitial loadAd];

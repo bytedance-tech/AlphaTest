@@ -14,6 +14,7 @@
 #import "NSString+LocalizedString.h"
 #import "BUDSlotID.h"
 #import "view/BUDMopubNativeAdView.h"
+#import "PangleNativeAdView.h"
 
 #import <mopub-ios-sdk/MPNativeAd.h>
 #import <mopub-ios-sdk/MPNativeAdRenderer.h>
@@ -27,6 +28,7 @@
 #import <mopub-ios-sdk/MOPUBNativeVideoAdRendererSettings.h>
 #import <mopub-ios-sdk/MOPUBNativeVideoAdRenderer.h>
 #import "BUDMopub_NativeAdRender.h"
+#import "PangleNativeAdRender.h"
 
 @interface BUDMopub_NativeAdCusEventVC () <UITableViewDelegate,UITableViewDataSource,MPNativeAdDelegate,MPNativeViewDelegate,BUNativeAdDelegate,BUVideoAdViewDelegate>
 @property (strong, nonatomic) UITableView *tableView;
@@ -65,13 +67,14 @@
         } else {
             self.nativeAd = response;
             self.nativeAd.delegate = self;
-            if ([self.nativeAd.properties objectForKey:@"bu_nativeAd"] != nil) {
-                BUNativeAd *nativeAd = [self.nativeAd.properties objectForKey:@"bu_nativeAd"];
-                nativeAd.delegate = self;
-                nativeAd.rootViewController = self;
-            }
+//            if ([self.nativeAd.properties objectForKey:@"bu_nativeAd"] != nil) {
+//                BUNativeAd *nativeAd = [self.nativeAd.properties objectForKey:@"bu_nativeAd"];
+//                nativeAd.delegate = self;
+//                nativeAd.rootViewController = self;
+//            }
             MPNativeView *view = (MPNativeView *)[self.nativeAd retrieveAdViewWithError:nil];
-            CGFloat height = [BUDMopubNativeAdView cellHeightWithModel:self.nativeAd width:CGRectGetWidth(self.tableView.bounds)];
+//            CGFloat height = [BUDMopubNativeAdView cellHeightWithModel:self.nativeAd width:CGRectGetWidth(self.tableView.bounds)];
+            CGFloat height = 400;
             view.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds),height);
             
             UITableViewCell *cell = [[UITableViewCell alloc] init];
@@ -88,13 +91,15 @@
         } else {
             self.nativeVideoAd = response;
             self.nativeVideoAd.delegate = self;
-            if ([self.nativeVideoAd.properties objectForKey:@"bu_nativeAd"] != nil) {
-                BUNativeAd *nativeAd = [self.nativeVideoAd.properties objectForKey:@"bu_nativeAd"];
-                nativeAd.delegate = self;
-                nativeAd.rootViewController = self;
-            }
+//            if ([self.nativeVideoAd.properties objectForKey:@"bu_nativeAd"] != nil) {
+//                BUNativeAd *nativeAd = [self.nativeVideoAd.properties objectForKey:@"bu_nativeAd"];
+//                nativeAd.delegate = self;
+//                nativeAd.rootViewController = self;
+//            }
             MPNativeView *view = (MPNativeView *)[self.nativeVideoAd retrieveAdViewWithError:nil];
-            CGFloat height = [BUDMopubNativeAdView cellHeightWithModel:self.nativeVideoAd width:CGRectGetWidth(self.tableView.bounds)];
+//            CGFloat height = [BUDMopubNativeAdView cellHeightWithModel:self.nativeVideoAd width:CGRectGetWidth(self.tableView.bounds)];
+            CGFloat height = 400;
+
             view.frame = CGRectMake(0, 0, CGRectGetWidth(self.tableView.bounds),height);
             
             UITableViewCell *cell = [[UITableViewCell alloc] init];
@@ -110,12 +115,12 @@
 
 - (void)setAdReq {
     MPStaticNativeAdRendererSettings *settings = [[MPStaticNativeAdRendererSettings alloc] init];
-    settings.renderingViewClass = [BUDMopubNativeAdView class];
+    settings.renderingViewClass = [PangleNativeAdView class];
     settings.viewSizeHandler = ^(CGFloat maximumWidth) {
         return CGSizeMake(maximumWidth,300);
     };
 
-    MPNativeAdRendererConfiguration *config = [BUDMopub_NativeAdRender rendererConfigurationWithRendererSettings:settings];
+    MPNativeAdRendererConfiguration *config = [PangleNativeAdRender rendererConfigurationWithRendererSettings:settings];
 
     
     // targeting
@@ -123,24 +128,24 @@
     targeting.desiredAssets =  targeting.desiredAssets = [NSSet setWithObjects:kAdTitleKey, kAdTextKey, kAdCTATextKey, kAdIconImageKey, kAdMainImageKey, kAdStarRatingKey, nil];
     
     // init adReq
-    _adReq = [MPNativeAdRequest requestWithAdUnitIdentifier:mopub_nativeAd_UnitID rendererConfigurations:@[config]];
+    _adReq = [MPNativeAdRequest requestWithAdUnitIdentifier:mopub_official_native_UnitID rendererConfigurations:@[config]];
     _adReq.targeting = targeting;
 }
 
 - (void)setVideoAdReq {
     MOPUBNativeVideoAdRendererSettings *nativeVideoAdSettings = [[MOPUBNativeVideoAdRendererSettings alloc] init];
-    nativeVideoAdSettings.renderingViewClass = [BUDMopubNativeAdView class];
+    nativeVideoAdSettings.renderingViewClass = [PangleNativeAdView class];
     nativeVideoAdSettings.viewSizeHandler = ^(CGFloat maximumWidth) {
         return CGSizeMake(100.0f, 312.0f);
     };
 
-    MPNativeAdRendererConfiguration *nativeVideoConfig = [BUDMopub_NativeAdRender rendererConfigurationWithRendererSettings:nativeVideoAdSettings];
+    MPNativeAdRendererConfiguration *nativeVideoConfig = [PangleNativeAdRender rendererConfigurationWithRendererSettings:nativeVideoAdSettings];
 
     
     MPNativeAdRequestTargeting *targeting = [MPNativeAdRequestTargeting targeting];
     targeting.desiredAssets =  targeting.desiredAssets = [NSSet setWithObjects:kAdTitleKey, kAdTextKey, kAdCTATextKey, kAdIconImageKey, kAdMainImageKey, kAdStarRatingKey, kVASTVideoKey,nil];
 
-    _videoAdReq = [MPNativeAdRequest requestWithAdUnitIdentifier:mopub_nativeAd_UnitID rendererConfigurations:@[nativeVideoConfig]];
+    _videoAdReq = [MPNativeAdRequest requestWithAdUnitIdentifier:mopub_official_native_UnitID rendererConfigurations:@[nativeVideoConfig]];
     _videoAdReq.targeting = targeting;
 }
 
@@ -281,12 +286,12 @@
         id model = [self.dataSource objectAtIndex:i];
         if ([model isKindOfClass:[UITableViewCell class]]) {
             UITableViewCell *cell = (UITableViewCell *)model;
-            BUDMopubNativeAdView *temp = (BUDMopubNativeAdView *)[[cell.contentView.subviews objectAtIndex:0].subviews objectAtIndex:0];
-            BUNativeAd *temp_native = temp.nativeAd;
-            if (temp_native == nativeAd) {
-                [self.dataSource removeObjectAtIndex:i];
-                break;
-            }
+//            BUDMopubNativeAdView *temp = (BUDMopubNativeAdView *)[[cell.contentView.subviews objectAtIndex:0].subviews objectAtIndex:0];
+//            BUNativeAd *temp_native = temp.nativeAd;
+//            if (temp_native == nativeAd) {
+//                [self.dataSource removeObjectAtIndex:i];
+//                break;
+//            }
         }
     }
     [self.tableView reloadData];

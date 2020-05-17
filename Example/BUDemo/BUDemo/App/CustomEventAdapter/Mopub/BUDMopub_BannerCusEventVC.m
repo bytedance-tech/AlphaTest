@@ -34,7 +34,7 @@
 - (void)loadBannerView {
     [self.adView removeFromSuperview];
     
-    self.adView = [[MPAdView alloc] initWithAdUnitId:mopub_banner_UnitID];
+    self.adView = [[MPAdView alloc] initWithAdUnitId:mopub_official_banner_UnitID];
     self.adView.delegate = self;
     self.adView.frame = CGRectMake(0,100,self.view.bounds.size.width, 50);
     [self.view addSubview:self.adView];
