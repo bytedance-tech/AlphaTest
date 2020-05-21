@@ -11,9 +11,9 @@
 #import "PangleNativeInterstitialView.h"
 #import "PangleAdapterConfiguration.h"
 #if __has_include("MoPub.h")
-    #import "MPError.h"
-    #import "MPLogging.h"
-    #import "MoPub.h"
+#import "MPError.h"
+#import "MPLogging.h"
+#import "MoPub.h"
 #endif
 
 @interface PangleInterstitialCustomEvent () <BUNativeAdDelegate,BUNativeExpresInterstitialAdDelegate,BUFullscreenVideoAdDelegate,PangleNativeInterstitialViewDelegate>
@@ -22,7 +22,7 @@
 @property (nonatomic, strong) BUNativeExpressInterstitialAd *expressInterstitialAd;
 @property (nonatomic, strong) BUFullscreenVideoAd *fullScreenVideo;
 @property (nonatomic, assign) BUAdSlotAdType adType;
-@property (nonatomic, assign) NSInteger renderType;
+@property (nonatomic, assign) PangleRenderMethod renderType;
 @property (nonatomic, copy) NSString *adPlacementId;
 @end
 
@@ -31,12 +31,15 @@
     BOOL hasAdMarkup = adMarkup.length > 0;
     NSDictionary *ritDict;
     NSString * appId = [info objectForKey:@"app_id"];
-    if (appId != nil){
+    if (appId != nil) {
         [PangleAdapterConfiguration updateInitializationParameters:info];
     }
     self.adPlacementId = [info objectForKey:@"ad_placement_id"];
+    if ([self.localExtras objectForKey:@"ad_placement_id"]) {
+        self.adPlacementId = [self.localExtras objectForKey:@"ad_placement_id"];
+    }
     if (self.adPlacementId == nil) {
-        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:0 userInfo:@{NSLocalizedDescriptionKey: @"Invalid Pangle placement ID. Failing ad request. Ensure the ad placement id is valid on the MoPub dashboard."}];
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:BUErrorCodeAdSlotEmpty userInfo:@{NSLocalizedDescriptionKey: @"Invalid Pangle placement ID. Failing ad request. Ensure the ad placement id is valid on the MoPub dashboard."}];
         MPLogAdEvent([MPLogEvent adLoadFailedForAdapter:NSStringFromClass(self.class) error:error], [self getAdNetworkId]);
         [self.delegate interstitialCustomEvent:self didFailToLoadAdWithError:error];
         return;
@@ -44,10 +47,9 @@
     ritDict = [BUAdSDKManager AdTypeWithRit:self.adPlacementId];
     
     self.adType = [[ritDict objectForKey:@"adSlotType"] integerValue];
-    //renderType: @"1" express AD   @"2" native AD
     self.renderType = [[ritDict objectForKey:@"renderType"] integerValue];
     if (self.adType == BUAdSlotAdTypeInterstitial) {
-        if (self.renderType == 1) {
+        if (self.renderType == PangleRenderMethodDynamic) {
             NSInteger width = MIN([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
             self.expressInterstitialAd = [[BUNativeExpressInterstitialAd alloc] initWithSlotID:self.adPlacementId adSize:CGSizeMake(width, 0)];
             self.expressInterstitialAd.delegate = self;
@@ -99,9 +101,8 @@
 }
 
 - (void)showInterstitialFromRootViewController:(UIViewController *)rootViewController {
-    //renderType: @"1" express AD   @"2" native AD
     if (self.adType == BUAdSlotAdTypeInterstitial) {
-        if (self.renderType == 1) {
+        if (self.renderType == PangleRenderMethodDynamic) {
             MPLogAdEvent([MPLogEvent adShowAttemptForAdapter:NSStringFromClass(self.class)], [self getAdNetworkId]);
             [self.expressInterstitialAd showAdFromRootViewController:rootViewController];
         } else {
@@ -147,12 +148,12 @@
 }
 
 #pragma mark PangleNativeInterstitialViewDelegate
-- (void)nativeInterstitialAdWillClose:(BUNativeAd *)nativeAd{
+- (void)nativeInterstitialAdWillClose:(BUNativeAd *)nativeAd {
     [self.delegate interstitialCustomEventWillDisappear:self];
     MPLogAdEvent([MPLogEvent adWillDisappearForAdapter:NSStringFromClass(self.class)], [self getAdNetworkId]);
 }
 
-- (void)nativeInterstitialAdDidClose:(BUNativeAd *)nativeAd{
+- (void)nativeInterstitialAdDidClose:(BUNativeAd *)nativeAd {
     [self.delegate interstitialCustomEventDidDisappear:self];
     MPLogAdEvent([MPLogEvent adDidDisappearForAdapter:NSStringFromClass(self.class)], [self getAdNetworkId]);
 }
@@ -185,6 +186,8 @@
 }
 
 - (void)nativeExpresInterstitialAdDidClick:(BUNativeExpressInterstitialAd *)interstitialAd {
+    MPLogAdEvent([MPLogEvent adWillDisappearForAdapter:NSStringFromClass(self.class)], [self getAdNetworkId]);
+    [self.delegate interstitialCustomEventWillDisappear:self];
     MPLogAdEvent([MPLogEvent adTappedForAdapter:NSStringFromClass(self.class)], [self getAdNetworkId]);
     [self.delegate interstitialCustomEventDidReceiveTapEvent:self];
     [self.delegate trackClick];

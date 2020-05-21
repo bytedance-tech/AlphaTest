@@ -20,6 +20,7 @@
 #import "BUDSlotID.h"
 #import <Bugly/Bugly.h>
 #import "BUAdSDKAdapterConfiguration.h"
+#import "BUDTestToolsViewController.h"
 
 #pragma mark - show FPS
 #ifdef DEBUG
@@ -62,8 +63,14 @@
 }
 
 - (void)configDemo {
+    [self configTestData];
     [self configFPS];
     [self configAPM];
+}
+
+- (void)configTestData {
+    // initialize test data
+    [BUDTestToolsViewController initializeTestSetting];
 }
 
 - (void)configFPS {

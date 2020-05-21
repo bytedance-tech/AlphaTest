@@ -57,6 +57,7 @@ The unique identifier of splash ad.
  */
 - (instancetype)initWithSlotID:(NSString *)slotID frame:(CGRect)frame;
 
+- (instancetype)initWithSlotID:(NSString *)slotID showSeq:(NSInteger)showSeq primeRit:(NSString * __nullable)primeRit frame:(CGRect)frame;
 /**
  Load splash ad datas.
  Start the countdown(@tolerateTimeout) as soon as you request datas.

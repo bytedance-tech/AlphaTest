@@ -30,10 +30,13 @@
         [PangleAdapterConfiguration updateInitializationParameters:info];
     }
     self.adPlacementId = [info objectForKey:@"ad_placement_id"];
+    if ([self.localExtras objectForKey:@"ad_placement_id"]) {
+        self.adPlacementId = [self.localExtras objectForKey:@"ad_placement_id"];
+    }
     if (self.adPlacementId == nil) {
-        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:0 userInfo:@{NSLocalizedDescriptionKey: @"Invalid Pangle placement ID"}];
+        NSError *error = [NSError errorWithDomain:NSStringFromClass([self class]) code:BUErrorCodeAdSlotEmpty userInfo:@{NSLocalizedDescriptionKey: @"Invalid Pangle placement ID"}];
         MPLogAdEvent([MPLogEvent adLoadFailedForAdapter:NSStringFromClass(self.class) error:error], [self getAdNetworkId]);
-        [self.delegate rewardedVideoDidFailToPlayForCustomEvent:self error:error];
+        [self.delegate rewardedVideoDidFailToLoadAdForCustomEvent:self error:error];
         return;
     }
     
@@ -42,6 +45,7 @@
     
     BURewardedVideoAd *RewardedVideoAd = [[BURewardedVideoAd alloc] initWithSlotID:self.adPlacementId rewardedVideoModel:model];
     RewardedVideoAd.delegate = self;
+    MPLogAdEvent([MPLogEvent adLoadAttemptForAdapter:NSStringFromClass(self.class) dspCreativeId:nil dspName:nil], [self getAdNetworkId]);
     self.rewardVideoAd = RewardedVideoAd;
     if (hasAdMarkup) {
         [RewardedVideoAd setMopubAdMarkUp:adMarkup];
@@ -55,7 +59,17 @@
 }
     
 - (void)presentRewardedVideoFromViewController:(UIViewController *)viewController {
-    [self.rewardVideoAd showAdFromRootViewController:viewController];
+    MPLogAdEvent([MPLogEvent adShowAttemptForAdapter:NSStringFromClass(self.class)], [self getAdNetworkId]);
+    if ([self hasAdAvailable]) {
+        [self.rewardVideoAd showAdFromRootViewController:viewController];
+    } else {
+        NSError *error = [NSError
+                          errorWithDomain:MoPubRewardedVideoAdsSDKDomain
+                          code:MPRewardedVideoAdErrorNoAdReady
+                          userInfo:@{NSLocalizedDescriptionKey : @"Rewarded ad is not ready to be presented."}];
+        MPLogAdEvent([MPLogEvent adShowFailedForAdapter:NSStringFromClass(self.class) error:error], [self getAdNetworkId]);
+        [self.delegate rewardedVideoDidFailToPlayForCustomEvent:self error:error];
+    }
 }
 
 - (BOOL)enableAutomaticImpressionAndClickTracking {
@@ -78,15 +92,21 @@
 }
 
 - (void)rewardedVideoAdDidVisible:(BURewardedVideoAd *)rewardedVideoAd {
-    MPLogAdEvent([MPLogEvent adWillPresentModalForAdapter:NSStringFromClass(self.class)], [self getAdNetworkId]);
+    MPLogAdEvent([MPLogEvent adWillAppearForAdapter:NSStringFromClass(self.class)], [self getAdNetworkId]);
     [self.delegate rewardedVideoWillAppearForCustomEvent:self];
+    
     [self.delegate trackImpression];
+    MPLogAdEvent([MPLogEvent adShowSuccessForAdapter:NSStringFromClass(self.class)], [self getAdNetworkId]);
+    
     [self.delegate rewardedVideoDidAppearForCustomEvent:self];
     MPLogAdEvent([MPLogEvent adDidAppearForAdapter:NSStringFromClass(self.class)], [self getAdNetworkId]);
 }
 
 - (void)rewardedVideoAdDidClose:(BURewardedVideoAd *)rewardedVideoAd {
     MPLogAdEvent([MPLogEvent adWillDisappearForAdapter:NSStringFromClass(self.class)], [self getAdNetworkId]);
+    [self.delegate rewardedVideoWillDisappearForCustomEvent:self];
+    
+    MPLogAdEvent([MPLogEvent adDidAppearForAdapter:NSStringFromClass(self.class)], [self getAdNetworkId]);
     [self.delegate rewardedVideoDidDisappearForCustomEvent:self];
 }
 
@@ -94,18 +114,20 @@
     MPLogAdEvent([MPLogEvent adTappedForAdapter:NSStringFromClass(self.class)], [self getAdNetworkId]);
     [self.delegate rewardedVideoDidReceiveTapEventForCustomEvent:self];
     [self.delegate trackClick];
+    [self.delegate rewardedVideoWillLeaveApplicationForCustomEvent:self];
 }
 
 - (void)rewardedVideoAdDidPlayFinish:(BURewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
-    MPLogAdEvent([MPLogEvent adLoadFailedForAdapter:NSStringFromClass(self.class) error:error], [self getAdNetworkId]);
-    if(error != nil)
+    if (error != nil) {
+        MPLogAdEvent([MPLogEvent adShowFailedForAdapter:NSStringFromClass(self.class) error:error], [self getAdNetworkId]);
         [self.delegate rewardedVideoDidFailToPlayForCustomEvent:self error:error];
+    }
 }
 
 - (void)rewardedVideoAdServerRewardDidSucceed:(BURewardedVideoAd *)rewardedVideoAd verify:(BOOL)verify {
     if (verify) {
         MPRewardedVideoReward *reward = [[MPRewardedVideoReward alloc] initWithCurrencyType:self.rewardVideoAd.rewardedVideoModel.rewardName amount:[NSNumber numberWithInteger:self.rewardVideoAd.rewardedVideoModel.rewardAmount]];
-        MPLogAdEvent([MPLogEvent adShouldRewardUserWithReward:reward],[self getAdNetworkId]);
+        MPLogAdEvent([MPLogEvent adShouldRewardUserWithReward:reward], [self getAdNetworkId]);
         [self.delegate rewardedVideoShouldRewardUserForCustomEvent:self reward:reward];
     }
 }

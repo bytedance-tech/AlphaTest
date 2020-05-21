@@ -13,12 +13,12 @@
 */
 typedef NS_ENUM(NSInteger, BUProposalSize) {
     BUProposalSize_Banner600_90,
-    BUProposalSize_Banner600_100,
+    BUProposalSize_Banner640_100,//之前写的 600_100 , 平台上是 640_100
     BUProposalSize_Banner600_150,
     BUProposalSize_Banner600_260,
-    BUProposalSize_Banner600_286,
+    BUProposalSize_Banner600_286,//平台上不存在该比例
     BUProposalSize_Banner600_300,
-    BUProposalSize_Banner600_388,
+    BUProposalSize_Banner690_388,//之前写的 600_388 , 平台上是 690_388
     BUProposalSize_Banner600_400,
     BUProposalSize_Banner600_500,
     BUProposalSize_Feed228_150,

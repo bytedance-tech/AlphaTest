@@ -36,6 +36,7 @@ typedef NS_ENUM(NSUInteger, BURewardedVideoAdType) {
 @property (nonatomic, copy, readonly) NSDictionary *mediaExt;
 
 - (instancetype)initWithSlotID:(NSString *)slotID rewardedVideoModel:(BURewardedVideoModel *)model;
+- (instancetype)initWithSlotID:(NSString *)slotID showSeq:(NSInteger)showSeq primeRit:(NSString * __nullable)primeRit rewardedVideoModel:(nonnull BURewardedVideoModel *)model;
 - (void)loadAdData;
 
 /**

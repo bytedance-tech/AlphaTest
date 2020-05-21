@@ -111,7 +111,6 @@
         [self->_dislikeButton setImage:image forState:UIControlStateNormal];
     }];
     [self.dislikeButton addTarget:self action:@selector(tapCloseButton) forControlEvents:UIControlEventTouchUpInside];
-    self.dislikeButton.imageEdgeInsets = UIEdgeInsetsMake(12.5, 12.5, 12.5, 12.5);
     [self.backgroundView addSubview:_dislikeButton];
 }
 
@@ -127,9 +126,9 @@
 
         CGFloat contentWidth = CGRectGetWidth(self.view.bounds);
         CGFloat imageViewHeight = contentWidth * adImage.height/ adImage.width;
-        
+        CGFloat statusH = [UIApplication sharedApplication].statusBarFrame.size.height;
         if (isPortrait) {
-            self.dislikeButton.frame = CGRectMake(contentWidth - 40, 10, 40, 40);
+            self.dislikeButton.frame = CGRectMake(contentWidth - 33.5, 10 + statusH, 21, 21);
             self.interstitialAdView.frame = CGRectMake(0, 0, contentWidth, imageViewHeight);
             self.logoImgeView.frame = CGRectMake(0, CGRectGetMaxY(self.interstitialAdView.frame) -  14.4, 35.6, 14.4);
             CGFloat ratio = [UIScreen mainScreen].bounds.size.width / 320.0;
@@ -156,7 +155,7 @@
 
         }else{
             CGFloat leftMargin = 12;
-            self.dislikeButton.frame = CGRectMake(contentWidth - 40 - 7.5, 7.5, 40, 40);
+            self.dislikeButton.frame = CGRectMake(contentWidth - 34.65, 20.5 + statusH, 14.15, 14.15);
             CGFloat bigImgBottom = 69 / 320.0 * self.view.bu_height;
             self.interstitialAdView.frame = CGRectMake(leftMargin, leftMargin, contentWidth - leftMargin * 2, self.view.bu_height - bigImgBottom - leftMargin);
             self.logoImgeView.frame = CGRectMake(leftMargin, CGRectGetMaxY(self.interstitialAdView.frame) -  14.4, 35.6, 14.4);
@@ -190,7 +189,7 @@
 }
 
 #pragma mark - private
-- (void)tapCloseButton{
+- (void)tapCloseButton {
     if (self.delegate && [self.delegate respondsToSelector:@selector(nativeInterstitialAdWillClose:)]) {
         [self.delegate nativeInterstitialAdWillClose:self.nativeAd];
     }
@@ -216,8 +215,7 @@
 }
 
 
-- (UIView *)starView
-{
+- (UIView *)starView {
     if (!_starView) {
         _starView = [[UIView alloc] init];
         _starView.backgroundColor = [UIColor clearColor];
@@ -227,7 +225,7 @@
             x = (starWidth + 4) * i;
             UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(x, 0, starWidth, starWidth)];
             imgView.backgroundColor = [UIColor clearColor];
-            NSInteger starCount = self.nativeAd.data.score ?: 4;// 产品定义默认星级
+            NSInteger starCount = self.nativeAd.data.score ?: 4; // The default value of the star count
             if (i < starCount) {
                 imgView.image = [UIImage bu_compatImageNamed:@"bu_adStar"];
             } else {

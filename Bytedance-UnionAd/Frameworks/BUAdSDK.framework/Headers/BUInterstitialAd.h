@@ -27,7 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param expectSize : custom size, default 600px * 400px
  @return BUInterstitialAd
  */
-- (instancetype)initWithSlotID:(NSString *)slotID size:(BUSize *)expectSize NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithSlotID:(NSString *)slotID size:(BUSize *)expectSize ;
+
+- (instancetype)initWithSlotID:(NSString *)slotID showSeq:(NSInteger)showSeq primeRit:(NSString * __nullable)primeRit size:(BUSize *)expectSize ;
 /**
  Load interstitial ad datas.
  */

@@ -312,11 +312,13 @@ static UIEdgeInsets const padding = {10, 15, 10, 15};
     
     if (!self.nativeAdRelatedView.videoAdView.superview) {
         [self.contentView addSubview:self.nativeAdRelatedView.videoAdView];
+        [self.contentView addSubview:self.nativeAdRelatedView.logoImageView];
     }
     
     if (self.creativeButton && !self.creativeButton.superview) {
         [self.contentView addSubview:self.creativeButton];
     }
+    
     CGFloat width = CGRectGetWidth(self.contentView.bounds);
     CGFloat contentWidth = (width - 2 * margin);
     CGFloat y = padding.top;
@@ -334,7 +336,7 @@ static UIEdgeInsets const padding = {10, 15, 10, 15};
     const CGFloat imageHeight = contentWidth * (image.height / image.width);
     
     self.nativeAdRelatedView.videoAdView.frame = CGRectMake(padding.left, y, contentWidth, imageHeight);
-    
+    self.nativeAdRelatedView.logoImageView.frame = CGRectMake(CGRectGetMaxX(self.nativeAdRelatedView.videoAdView.frame) - logoSize.width, CGRectGetMaxY(self.nativeAdRelatedView.videoAdView.frame) - logoSize.height, logoSize.width, logoSize.height);
     y += imageHeight;
     
     self.bgView.frame = CGRectMake(padding.left, y, contentWidth, self.creativeButton.frame.size.height + 20);

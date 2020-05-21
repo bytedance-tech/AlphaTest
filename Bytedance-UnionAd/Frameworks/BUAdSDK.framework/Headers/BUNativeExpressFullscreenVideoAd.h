@@ -113,6 +113,8 @@ This method is used to get the type of nativeExpressFullScreenVideo ad
  */
 - (instancetype)initWithSlotID:(NSString *)slotID;
 
+- (instancetype)initWithSlotID:(NSString *)slotID showSeq:(NSInteger)showSeq primeRit:(NSString * __nullable)primeRit;
+
 /**
  Load video ad datas.
  */

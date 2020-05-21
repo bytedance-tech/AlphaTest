@@ -84,6 +84,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)initWithSlotID:(NSString *)slotID adSize:(CGSize)adsize;
 
+- (instancetype)initWithSlotID:(NSString *)slotID showSeq:(NSInteger)showSeq primeRit:(NSString * __nullable)primeRit adSize:(CGSize)adsize;
+
 /**
  Load interstitial ad datas.
  */

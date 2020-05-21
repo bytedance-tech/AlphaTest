@@ -53,6 +53,14 @@ NS_ASSUME_NONNULL_BEGIN
             rootViewController:(UIViewController *)rootViewController
                       interval:(NSInteger)interval;
 
+- (instancetype)initWithSlotID:(NSString *)slotID
+                       showSeq:(NSInteger)showSeq
+                      primeRit:(NSString *)primeRit
+            rootViewController:(UIViewController *)rootViewController
+                        adSize:(CGSize)adSize
+              withShowPosition:(BUAdSlotPosition)showPosition
+         WithIsSupportDeepLink:(BOOL)isSupportDeepLink;
+
 - (void)loadAdData;
 
 - (IBAction)dislikeAction:(id)sender;

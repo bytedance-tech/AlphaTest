@@ -106,6 +106,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)initWithSlotID:(NSString *)slotID adSize:(CGSize)adSize rootViewController:(UIViewController *)rootViewController;
 
+- (instancetype)initWithSlotID:(NSString *)slotID showSeq:(NSInteger)showSeq primeRit:(NSString * __nullable)primeRit adSize:(CGSize)adSize rootViewController:(UIViewController *)rootViewController;
+
 /**
  Load splash ad datas.
  Start the countdown(@tolerateTimeout) as soon as you request datas.

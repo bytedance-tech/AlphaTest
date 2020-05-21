@@ -61,6 +61,10 @@ typedef NS_ENUM(NSInteger, BUAdSlotPosition) {
 /// Native banner ads and native interstitial ads are set to 1, other ad types are 0, the default is 0.
 @property (nonatomic, assign) BOOL isOriginAd;
 
+@property (nonatomic, assign) NSInteger showSeq;
+
+@property (nonatomic, copy) NSString *primeRit;
+
 - (NSDictionary *)dictionaryValue;
 
 @end

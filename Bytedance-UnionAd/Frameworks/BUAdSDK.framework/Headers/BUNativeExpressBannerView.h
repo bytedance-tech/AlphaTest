@@ -89,6 +89,21 @@ NS_ASSUME_NONNULL_BEGIN
              IsSupportDeepLink:(BOOL)isSupportDeepLink
                       interval:(NSInteger)interval;
 
+- (instancetype)initWithSlotID:(NSString *)slotID
+                       showSeq:(NSInteger)showSeq
+                      primeRit:(NSString *)primeRit
+            rootViewController:(UIViewController *)rootViewController
+            adSize:(CGSize)adsize
+             IsSupportDeepLink:(BOOL)isSupportDeepLink;
+
+- (instancetype)initWithSlotID:(NSString *)slotID
+                       showSeq:(NSString *)showSeq
+                      primeRit:(NSString *)primeRit
+            rootViewController:(UIViewController *)rootViewController
+                        adSize:(CGSize)adsize
+             IsSupportDeepLink:(BOOL)isSupportDeepLink
+                      interval:(NSInteger)interval;
+
 - (void)loadAdData;
 
 @end

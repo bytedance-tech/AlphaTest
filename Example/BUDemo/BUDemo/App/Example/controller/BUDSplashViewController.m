@@ -109,7 +109,7 @@
     BUSplashAdView *splashView = [[BUSplashAdView alloc] initWithSlotID:self.viewModel.slotID frame:self.splashFrame];
     splashView.delegate = self;
     splashView.rootViewController = self;
-    
+    splashView.tolerateTimeout = 3;
     [splashView loadAdData];
     [self.navigationController.view addSubview:splashView];
     self.splashView = splashView;
