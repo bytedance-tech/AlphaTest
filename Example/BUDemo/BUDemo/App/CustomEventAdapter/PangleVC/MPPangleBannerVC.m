@@ -51,7 +51,7 @@
                           @"900546387"  :  [NSValue valueWithCGSize:CGSizeMake(600, 260)],
                           @"945182437"  :  [NSValue valueWithCGSize:CGSizeMake(600, 300)],
                           @"945113150"  :  [NSValue valueWithCGSize:CGSizeMake(600, 400)],
-                          @"945113147"  :  [NSValue valueWithCGSize:CGSizeMake(600, 500)],
+                          @"945189361"  :  [NSValue valueWithCGSize:CGSizeMake(600, 500)],
                           };
 
     
@@ -62,7 +62,7 @@
     BUDSelcetedItem *item5 = [[BUDSelcetedItem alloc] initWithDict:@{@"slotID":@"900546387",@"title":@"600*260"}];
     BUDSelcetedItem *item6 = [[BUDSelcetedItem alloc] initWithDict:@{@"slotID":@"945182437",@"title":@"600*300"}];
     BUDSelcetedItem *item7 = [[BUDSelcetedItem alloc] initWithDict:@{@"slotID":@"945113150",@"title":@"600*400"}];
-    BUDSelcetedItem *item8 = [[BUDSelcetedItem alloc] initWithDict:@{@"slotID":@"945113147",@"title":@"600*500"}];
+    BUDSelcetedItem *item8 = [[BUDSelcetedItem alloc] initWithDict:@{@"slotID":@"945189361",@"title":@"600*500"}];
 
     NSArray *titlesAndIDS = @[@[item1,item2,item3],@[item4,item5,item6],@[item7,item8]];
 

@@ -44,14 +44,14 @@
     self.sizeDcit = @{
                           //模板
                           @"945182439"   :  [NSValue valueWithCGSize:CGSizeMake(600, 90)],
-                          @"945166823"  :  [NSValue valueWithCGSize:CGSizeMake(640, 100)],
-                          @"945113155"  :  [NSValue valueWithCGSize:CGSizeMake(600, 150)],
+                          @"945189364"  :  [NSValue valueWithCGSize:CGSizeMake(640, 100)],
+                          @"945189363"  :  [NSValue valueWithCGSize:CGSizeMake(600, 150)],
                           };
 
     
     BUDSelcetedItem *item1 = [[BUDSelcetedItem alloc] initWithDict:@{@"slotID":@"945182439",@"title":@"1:1"}];
-    BUDSelcetedItem *item2 = [[BUDSelcetedItem alloc] initWithDict:@{@"slotID":@"945166823",@"title":@"2:3"}];
-    BUDSelcetedItem *item3 = [[BUDSelcetedItem alloc] initWithDict:@{@"slotID":@"945113155",@"title":@"3:2"}];
+    BUDSelcetedItem *item2 = [[BUDSelcetedItem alloc] initWithDict:@{@"slotID":@"945189364",@"title":@"2:3"}];
+    BUDSelcetedItem *item3 = [[BUDSelcetedItem alloc] initWithDict:@{@"slotID":@"945189363",@"title":@"3:2"}];
 
     NSArray *titlesAndIDS = @[@[item1,item2,item3]];
 
