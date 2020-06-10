@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PangleNativeInterstitialView : UIViewController
 
+@property (nonatomic, getter=isAdValid, readonly) BOOL adValid;
+
 - (void)refreshUIWithAd:(BUNativeAd *_Nonnull)nativeAd;
 - (BOOL)showAdFromRootViewController:(UIViewController *)rootViewController delegate:(id <PangleNativeInterstitialViewDelegate>)delegate;
 @end
